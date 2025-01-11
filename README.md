@@ -17,7 +17,7 @@ A Python script to dynamically generate file structures based on user input. Per
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/DeepSeekAI/file-structure-generator.git
+   git clone https://github.com/ghhrmnzdh/file-structure-generator.git
    cd file-structure-generator
    ```
 
