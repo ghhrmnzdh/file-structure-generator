@@ -33,19 +33,21 @@ def create_file_structure(file_structure, output_folder):
             continue
 
         # Determine the indentation level
-        indent_level = (len(line) - len(line.lstrip())) // 4  # Assuming 4 spaces per indent
+        # Count the number of leading spaces and divide by 4 (assuming 4 spaces per indent)
+        indent_level = (len(line) - len(line.lstrip())) // 4
         line = line.strip()
+
+        # Adjust the current path based on the indentation level
+        current_path = current_path[:indent_level + 1]  # +1 to include the output folder
 
         if line.endswith('/'):
             # It's a directory
             dir_name = line[:-1]
-            current_path = current_path[:indent_level + 1]  # +1 to include the output folder
             current_path.append(dir_name)
             os.makedirs(os.path.join(*current_path), exist_ok=True)
         else:
             # It's a file
             file_name = line
-            current_path = current_path[:indent_level + 1]  # +1 to include the output folder
             file_path = os.path.join(*current_path, file_name)
             open(file_path, 'a').close()
 
