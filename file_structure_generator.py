@@ -1,4 +1,5 @@
 import os
+import argparse
 
 def clean_line(line):
     """
@@ -10,7 +11,7 @@ def clean_line(line):
     line = line.split("#")[0].strip()
     return line
 
-def create_file_structure(file_structure):
+def create_file_structure(file_structure, output_folder):
     """
     Creates directories and files based on the provided file structure.
 
@@ -18,9 +19,10 @@ def create_file_structure(file_structure):
         file_structure (str): A multi-line string representing the desired file structure.
                              Lines ending with `/` are treated as directories.
                              Other lines are treated as files.
+        output_folder (str): The folder where the file structure will be created.
     """
     lines = file_structure.strip().split('\n')
-    current_path = []
+    current_path = [output_folder]  # Start with the output folder as the base path
 
     for line in lines:
         # Clean the line by removing tree structure characters and comments
@@ -37,41 +39,36 @@ def create_file_structure(file_structure):
         if line.endswith('/'):
             # It's a directory
             dir_name = line[:-1]
-            current_path = current_path[:indent_level]
+            current_path = current_path[:indent_level + 1]  # +1 to include the output folder
             current_path.append(dir_name)
             os.makedirs(os.path.join(*current_path), exist_ok=True)
         else:
             # It's a file
             file_name = line
-            current_path = current_path[:indent_level]
+            current_path = current_path[:indent_level + 1]  # +1 to include the output folder
             file_path = os.path.join(*current_path, file_name)
             open(file_path, 'a').close()
 
-if __name__ == "__main__":
-    # Example file structure input
-    file_structure = """
-    project-name/
-    │
-    ├── README.md               # Project documentation
-    ├── requirements.txt        # Python dependencies
-    ├── main.py                 # Main script
-    ├── utils/                  # Utility functions
-    │   ├── __init__.py
-    │   ├── file_utils.py       # File handling utilities
-    │   └── math_utils.py       # Math utilities
-    │
-    ├── config/                 # Configuration files
-    │   ├── settings.json       # Application settings
-    │   └── constants.py        # Constants
-    │
-    ├── logs/                   # Log files
-    │   └── app_logs.log
-    │
-    └── tests/                  # Test cases
-        ├── __init__.py
-        ├── test_utils.py       # Tests for utility functions
-        └── test_main.py        # Tests for main script
-    """
+def main():
+    # Set up argument parsing
+    parser = argparse.ArgumentParser(description="Generate a file structure from a multi-line string input.")
+    parser.add_argument(
+        "--input", 
+        type=str, 
+        required=True, 
+        help="Multi-line string representing the file structure."
+    )
+    parser.add_argument(
+        "--output", 
+        type=str, 
+        required=True, 
+        help="Folder where the file structure will be created."
+    )
+    args = parser.parse_args()
 
-    create_file_structure(file_structure)
-    print("File structure created successfully.")
+    # Create the file structure
+    create_file_structure(args.input, args.output)
+    print(f"File structure created successfully in '{args.output}'.")
+
+if __name__ == "__main__":
+    main()
