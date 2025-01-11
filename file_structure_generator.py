@@ -1,6 +1,5 @@
 import os
 import argparse
-import math
 
 def clean_line(line):
     """
@@ -67,8 +66,7 @@ def create_file_structure(file_structure, output_folder):
             continue
 
         # Determine the indentation level based on leading spaces
-        indentation = len(clean) - len(clean.lstrip())
-        indent_level = math.ceil(indentation / indentation_size)
+        indent_level = (len(clean) - len(clean.lstrip())) // indentation_size
 
         # Adjust the stack to the current indentation level
         while len(stack) > indent_level + 1:
