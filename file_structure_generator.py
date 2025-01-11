@@ -49,6 +49,8 @@ def create_file_structure(file_structure, output_folder):
             # It's a file
             file_name = line
             file_path = os.path.join(*current_path, file_name)
+            # Ensure the parent directory exists
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
             open(file_path, 'a').close()
 
 def main():
