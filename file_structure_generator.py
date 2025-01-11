@@ -1,5 +1,15 @@
 import os
 
+def clean_line(line):
+    """
+    Removes tree structure characters (e.g., ├──, │, └──) and comments from a line.
+    """
+    # Remove tree structure characters
+    line = line.replace("├──", "").replace("│", "").replace("└──", "").strip()
+    # Remove comments (everything after #)
+    line = line.split("#")[0].strip()
+    return line
+
 def create_file_structure(file_structure):
     """
     Creates directories and files based on the provided file structure.
@@ -13,6 +23,13 @@ def create_file_structure(file_structure):
     current_path = []
 
     for line in lines:
+        # Clean the line by removing tree structure characters and comments
+        line = clean_line(line)
+
+        # Skip empty lines
+        if not line:
+            continue
+
         # Determine the indentation level
         indent_level = (len(line) - len(line.lstrip())) // 4  # Assuming 4 spaces per indent
         line = line.strip()
@@ -25,7 +42,7 @@ def create_file_structure(file_structure):
             os.makedirs(os.path.join(*current_path), exist_ok=True)
         else:
             # It's a file
-            file_name = line.split('#')[0].strip()  # Ignore comments after #
+            file_name = line
             current_path = current_path[:indent_level]
             file_path = os.path.join(*current_path, file_name)
             open(file_path, 'a').close()
