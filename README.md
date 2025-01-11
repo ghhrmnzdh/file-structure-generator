@@ -1,6 +1,6 @@
 # File Structure Generator 🚀
 
-A Python script to dynamically generate file structures based on user input. Perfect for developers to quickly create organized project templates. Supports nested directories, customizable inputs, and command-line flexibility.
+A Python script to generate file structures from user input. Perfect for developers to create organized project templates. Supports nested directories, CLI flexibility and AI generated file structures. 🚀
 
 ---
 
