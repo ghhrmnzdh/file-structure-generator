@@ -1,15 +1,27 @@
 import os
 import argparse
+import math
 
 def clean_line(line):
     """
-    Removes tree structure characters (e.g., ├──, │, └──) and comments from a line.
+    Removes tree structure characters and comments from a line, replacing tabs with four spaces.
     """
-    # Remove tree structure characters
-    line = line.replace("├──", "").replace("│", "").replace("└──", "").strip()
-    # Remove comments (everything after #)
-    line = line.split("#")[0].strip()
+    line = line.replace("├──", "").replace("│", "").replace("└──", "").replace("\t", "    ")
+    line = line.split("#")[0]
     return line
+
+def detect_indentation_size(lines):
+    """
+    Detects the number of spaces used for indentation in the file structure.
+    Defaults to 4 spaces if no indentation is detected.
+    """
+    for line in lines:
+        stripped_line = line.lstrip()
+        if stripped_line and not stripped_line.startswith("#"):
+            indentation = len(line) - len(stripped_line)
+            if indentation > 0:
+                return indentation
+    return 4  # Default to 4 spaces if no indentation is detected
 
 def create_file_structure(file_structure, output_folder):
     """
@@ -17,55 +29,82 @@ def create_file_structure(file_structure, output_folder):
 
     Args:
         file_structure (str): A multi-line string representing the desired file structure.
-                             Lines ending with `/` are treated as directories.
-                             Other lines are treated as files.
+                              Lines ending with '/' are treated as directories.
+                              Other lines are treated as files.
         output_folder (str): The folder where the file structure will be created.
     """
     lines = file_structure.strip().split('\n')
-    current_path = [output_folder]  # Start with the output folder as the base path
+
+    # Detect the indentation size
+    indentation_size = detect_indentation_size(lines)
+    if indentation_size == 0:
+        indentation_size = 4  # Fallback to 4 spaces if indentation size is 0
+
+    # Initialize stack with the output folder
+    stack = [output_folder]
+
+    # Identify the root directory
+    root_dir_line = clean_line(lines[0])
+    if root_dir_line.endswith('/'):
+        root_dir = root_dir_line[:-1]
+    else:
+        root_dir = root_dir_line
+
+    # Create root directory inside the output folder
+    root_dir_path = os.path.join(output_folder, root_dir)
+    os.makedirs(root_dir_path, exist_ok=True)
+    stack.append(root_dir)
+
+    # Skip the root directory line
+    lines = lines[1:]
 
     for line in lines:
-        # Clean the line by removing tree structure characters and comments
-        line = clean_line(line)
+        # Clean the line without stripping to preserve leading spaces
+        clean = clean_line(line)
 
         # Skip empty lines
-        if not line:
+        if not clean.strip():
             continue
 
-        # Determine the indentation level
-        # Count the number of leading spaces and divide by 4 (assuming 4 spaces per indent)
-        indent_level = (len(line) - len(line.lstrip())) // 4
-        line = line.strip()
+        # Determine the indentation level based on leading spaces
+        indentation = len(clean) - len(clean.lstrip())
+        indent_level = math.ceil(indentation / indentation_size)
 
-        # Adjust the current path based on the indentation level
-        current_path = current_path[:indent_level + 1]  # +1 to include the output folder
+        # Adjust the stack to the current indentation level
+        while len(stack) > indent_level + 1:
+            stack.pop()
 
-        if line.endswith('/'):
+        # Remove leading spaces to get the actual item name
+        item_name = clean.lstrip()
+
+        if item_name.endswith('/'):
             # It's a directory
-            dir_name = line[:-1]
-            current_path.append(dir_name)
-            os.makedirs(os.path.join(*current_path), exist_ok=True)
+            dir_name = item_name[:-1]
+            dir_path = os.path.join(*stack, dir_name)
+            os.makedirs(dir_path, exist_ok=True)
+            stack.append(dir_name)
+            print(f"Created directory: {dir_path}")
         else:
             # It's a file
-            file_name = line
-            file_path = os.path.join(*current_path, file_name)
-            # Ensure the parent directory exists
+            file_path = os.path.join(*stack, item_name)
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
-            open(file_path, 'a').close()
+            with open(file_path, 'w') as f:
+                f.write(f"Placeholder content for {file_path}\n")
+            print(f"Created file: {file_path}")
 
 def main():
     # Set up argument parsing
     parser = argparse.ArgumentParser(description="Generate a file structure from a multi-line string input.")
     parser.add_argument(
-        "--input", 
-        type=str, 
-        required=True, 
+        "--input",
+        type=str,
+        required=True,
         help="Multi-line string representing the file structure."
     )
     parser.add_argument(
-        "--output", 
-        type=str, 
-        required=True, 
+        "--output",
+        type=str,
+        required=True,
         help="Folder where the file structure will be created."
     )
     args = parser.parse_args()
