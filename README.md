@@ -1,49 +1,52 @@
-# File Structure Generator 🚀
+# File Structure Generator
 
-A Python script to generate file structures from user input. Perfect for developers to create organized project templates. Supports nested directories, CLI flexibility and AI generated file structures. 🚀
+File Structure Generator is a lightweight Python utility that dynamically creates file and directory structures from user input. It is designed to help developers quickly set up organized project templates—supporting nested directories, CLI flexibility, and even AI-generated file structures.
 
----
+## Features
 
-## Features ✨
+- **Dynamic Structure Creation:** Generate directories and files from a multi-line string input.
+- **Nested Directory Support:** Easily create deeply nested hierarchies.
+- **Customizable:** Adapt the input format to suit your specific project needs.
+- **Lightweight & Dependency-Free:** Written in pure Python—no external libraries required.
+- **Command-Line Interface (CLI):** Define the file structure and target output folder directly from the command line.
 
-- **Dynamic File Structure Creation**: Generate directories and files from a multi-line string input.
-- **Nested Structures**: Supports deeply nested directory hierarchies.
-- **Customizable**: Easily adapt the input to match your project's needs.
-- **Lightweight**: No dependencies—just pure Python.
-- **Command-Line Interface (CLI)**: Specify the file structure and output folder directly when running the script.
+## Installation
 
----
+1. **Clone the Repository:**
 
-## Installation 📥
-
-1. Clone the repository:
    ```bash
    git clone https://github.com/ghhrmnzdh/file-structure-generator.git
    cd file-structure-generator
    ```
 
-2. Ensure you have Python installed (Python 3.6 or higher).
+2. **Verify Python Installation:**
+   
+   Ensure you have Python 3.6 or later installed on your system.
 
-3. Run the script:
+3. **Run the Script:**
+
    ```bash
    python file_structure_generator.py --input "your-file-structure" --output "your-folder"
    ```
 
----
+## Usage
 
-## Usage 🛠️
+### 1. Define Your File Structure
 
-### Step 1: Define Your File Structure
-Provide the file structure as a multi-line string using the `--input` argument. Use the following format:
-- Lines ending with `/` are treated as **directories**.
-- Other lines are treated as **files**.
-- Use indentation (4 spaces) to define nested structures.
+Pass the file structure as a multi-line string using the `--input` argument. The format to follow is:
 
-### Step 2: Specify the Output Folder
-Use the `--output` argument to specify the folder where the file structure will be created. If the folder doesn’t exist, it will be created automatically.
+- **Directories:** Lines ending with a forward slash (`/`) are interpreted as directories.
+- **Files:** All other lines are treated as files.
+- **Indentation:** Use 4 spaces per level to define nested relationships.
 
-### Step 3: Run the Script
-Execute the script with your input and output arguments. For example:
+### 2. Specify the Output Folder
+
+Use the `--output` argument to designate the folder where the file structure will be created. The script will automatically create the folder if it does not already exist.
+
+### 3. Execute the Script
+
+Run the script with your parameters. For example:
+
 ```bash
 python file_structure_generator.py \
     --input "
@@ -60,11 +63,10 @@ my-project/
     --output "my-project-folder"
 ```
 
----
-
-## Examples 🚀
+## Examples
 
 ### Example 1: Web Application
+
 ```bash
 python file_structure_generator.py \
     --input "
@@ -88,10 +90,10 @@ web-app/
     --output "web-app-folder"
 ```
 
-**Output Structure**:
+**Resulting Structure:**
+
 ```
 web-app-folder/
-│
 ├── README.md
 ├── app/
 │   ├── __init__.py
@@ -109,9 +111,8 @@ web-app-folder/
     └── test_routes.py
 ```
 
----
-
 ### Example 2: CLI Tool
+
 ```bash
 python file_structure_generator.py \
     --input "
@@ -130,10 +131,10 @@ cli-tool/
     --output "cli-tool-folder"
 ```
 
-**Output Structure**:
+**Resulting Structure:**
+
 ```
 cli-tool-folder/
-│
 ├── README.md
 ├── cli/
 │   ├── __init__.py
@@ -146,10 +147,8 @@ cli-tool-folder/
     └── test_cli.py
 ```
 
----
+### Example 3: Deeply Nested Project
 
-### Example 3: Nested Structure (Working!)
-This example demonstrates a deeply nested file structure:
 ```bash
 python file_structure_generator.py \
     --input "
@@ -184,10 +183,10 @@ nested-project/
     --output "nested-project-folder"
 ```
 
-**Output Structure**:
+**Resulting Structure:**
+
 ```
 nested-project-folder/
-│
 ├── README.md
 ├── src/
 │   ├── __init__.py
@@ -216,38 +215,34 @@ nested-project-folder/
         └── test_file_utils.py
 ```
 
----
+## Benefits
 
-## Why Use This Tool? 💡
+### Time Savings
 
-### Save Time ⏳
-Manually creating directories and files for a new project can be tedious. This tool automates the process, allowing you to focus on writing code instead of setting up folders.
+Automate the creation of complex directory structures, allowing you to focus on development rather than manual setup.
 
-### Stay Organized 🗂️
-A well-structured project is easier to navigate and maintain. This tool ensures consistency across your projects, whether you're working alone or in a team.
+### Consistent Organization
 
-### No Dependencies 🚀
-The script is written in pure Python, so you don’t need to install any additional libraries. Just clone the repository and start using it!
+Maintain a standardized project structure, which simplifies project navigation and maintenance, whether you’re working solo or in a team environment.
 
----
+### Zero Dependencies
 
-## Contributing 🤝
+Enjoy a streamlined solution written entirely in Python without any additional libraries—simply clone the repository and get started.
 
-Contributions are welcome! If you have ideas for improvements or new features, please:
+## Contributing
+
+Contributions are welcome! To contribute:
+
 1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/your-feature`).
-3. Commit your changes (`git commit -m 'Add some feature'`).
-4. Push to the branch (`git push origin feature/your-feature`).
-5. Open a pull request.
+2. Create a new branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -m 'Add your feature'`
+4. Push to the branch: `git push origin feature/your-feature`
+5. Open a pull request with a detailed description of your changes.
 
----
+## Support
 
-## Support 🌟
+If you find File Structure Generator useful, please consider giving the project a star on GitHub. Your support is greatly appreciated and motivates further development.
 
-If you find this tool helpful, please give it a ⭐ on GitHub! Your support encourages further development and improvements.
+## Contact
 
----
-
-## Questions or Feedback? 💬
-
-Feel free to open an issue on the repository or reach out to me directly. Let’s build something amazing together! 🚀
+For questions or feedback, please open an issue on GitHub or contact the project maintainer directly.
